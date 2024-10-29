@@ -62,6 +62,7 @@ namespace StudentRegister
                 }
             }
         }
+        #region string-types
         public static string CityName()
         {
             return "city";
@@ -78,5 +79,6 @@ namespace StudentRegister
         {
             return "age";
         }
+        #endregion
     }
 }

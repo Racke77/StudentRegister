@@ -17,6 +17,7 @@ namespace StudentRegister
         {
             StartingMenu();
         }
+        #region Updating Menu List
         public void StartingMenu()
         {
             if (MenuList != null)
@@ -36,6 +37,7 @@ namespace StudentRegister
         {
             MenuList = menuOptions;
         }
+        #endregion
         public int MenuSelection()
         {
             MenuSelect = 0;
@@ -49,6 +51,7 @@ namespace StudentRegister
             }
             return MenuSelect;
         }
+        #region Printing
         private void PrintMenuOptions()
         {
             foreach (string menuOption in MenuList)
@@ -61,6 +64,8 @@ namespace StudentRegister
                 Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
+        #endregion
+        #region User-input
         private void HandleUserInput()
         {
             var keyPressed = Console.ReadKey();
@@ -90,5 +95,6 @@ namespace StudentRegister
                     break;
             }
         }
+        #endregion
     }
 }

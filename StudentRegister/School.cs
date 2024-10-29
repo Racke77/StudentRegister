@@ -18,6 +18,7 @@ namespace StudentRegister
             DbStudentContext = new StudentDbContext();
             Menu = new Menu();
         }
+        #region Main-program
         public void ReceptionDesk()
         {
             while (true)
@@ -51,6 +52,8 @@ namespace StudentRegister
                 }
             }
         }
+        #endregion
+        #region Add new student
         public void AddNewStudent()
         {
             //calling the input-methods
@@ -64,10 +67,21 @@ namespace StudentRegister
             DbStudentContext.Add(new Student(studentAge, firstName, lastName, city));
             DbStudentContext.SaveChanges();
         }
+        #endregion
+        #region Printing
         public void PrintStudent(Student student)
         {
             Console.WriteLine($"Student ID: {student.StudentId}. Name: {student.FirstName} {student.LastName}. Age: {student.StudentAge}. City of Residence: {student.City}.");
         }
+        public void PrintFoundStudents()
+        {
+            foreach (Student student in FoundStudents)
+            {
+                PrintStudent(student);
+            }
+        }
+        #endregion
+        #region Making a selectable list of students
         public List<string> StudentListMenu()
         {
             //create a string-list out of the database -> so that the menu can use it
@@ -80,6 +94,17 @@ namespace StudentRegister
             Menu.MenuUpdate(studentList);
             return studentList;
         }
+        public List<int> StudentIdMenu()
+        {
+            List<int> studentIds = new List<int>();
+            foreach (var student in DbStudentContext.Students)
+            {
+                studentIds.Add(student.StudentId);
+            }
+            return studentIds;
+        }
+        #endregion
+        #region Editing a student
         public Student PickStudentToEdit()
         {
             Menu.MenuUpdate(new List<string>() { "Pick from a list", "Find by ID" });
@@ -87,16 +112,14 @@ namespace StudentRegister
             {
                 case 0:
                     //create a menu of students
-                    List<string> studentList = StudentListMenu();
-                    Menu.MenuUpdate(studentList);
-
-                    int studentId = Menu.MenuSelection() + 1; //database-index starts at 1 instead of 0
-                                                              //risky -> if the database has ID-gaps where it suddenly skips to 100 -> won't work
+                    Menu.MenuUpdate(StudentListMenu());
+                    //select the ID-value at menu-selected
+                    int studentId = StudentIdMenu()[Menu.MenuSelection()];
                     return FindStudentById(studentId);
                 case 1:
                     studentId = Input.IntInput("ID");
                     return FindStudentById(studentId);
-                default: 
+                default:
                     return null;
             }
         }
@@ -133,6 +156,8 @@ namespace StudentRegister
             Menu.MenuUpdate(editOptions);
             return Menu.MenuSelection();
         }
+        #endregion
+        #region Find students
         public void FindStudentList()
         {
             Menu.MenuUpdate(FindStudentsOptions());
@@ -159,28 +184,35 @@ namespace StudentRegister
                     FindStudentByCity(city);
                     PrintFoundStudents();
                     break;
-                case 4: //search by ID
+                case 4://age
+                    break;
+                case 5: //search by ID
                     var foundStudent = FindStudentById(Input.IntInput("ID"));
                     break;
             }
         }
+        #region Finding a single student
+        public Student FindStudentById(int studentId)
+        {
+            var foundStudent = DbStudentContext.Students.Where(s => s.StudentId == studentId).FirstOrDefault<Student>();
+            return foundStudent;
+        }
+        #endregion
+        #region For the finding-menu
         public List<string> FindStudentsOptions()
         {
             List<string> findStudents = new List<string>() {
                 "Search by full name",
                 "Search by first name",
                 "Search by last name",
-                "Search by city"
+                "Search by city",
+                "Search by age",
+                "Search by ID"
             };
             return findStudents;
         }
-        public void PrintFoundStudents()
-        {
-            foreach (Student student in FoundStudents)
-            {
-                PrintStudent(student);
-            }
-        }
+        #endregion
+        #region Search by
         public void FindStudentByFirstName(string firstName)
         {
             FoundStudents = DbStudentContext.Students.Where(s => s.FirstName == firstName);
@@ -197,10 +229,11 @@ namespace StudentRegister
         {
             FoundStudents = DbStudentContext.Students.Where(s => s.City == city);
         }
-        public Student FindStudentById(int studentId)
+        public void FindStudentByAge(int age)
         {
-            var foundStudent = DbStudentContext.Students.Where(s => s.StudentId == studentId).FirstOrDefault<Student>();
-            return foundStudent;
+            FoundStudents = DbStudentContext.Students.Where(s => s.StudentAge == age);
         }
+        #endregion
+        #endregion
     }
 }
