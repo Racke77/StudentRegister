@@ -64,6 +64,21 @@ namespace StudentRegister
                 Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
+        public int PrintMenuForEdit(Student student, School school)
+        {
+            MenuSelect = 0;
+            SelectedOption = false;
+            while (SelectedOption != true)
+            {
+                Console.Clear();
+                school.PrintStudent(student);
+                Console.WriteLine();
+                Console.CursorVisible = false;
+                PrintMenuOptions();//printing out the full menu
+                HandleUserInput();
+            }
+            return MenuSelect;
+        }
         #endregion
         #region User-input
         private void HandleUserInput()

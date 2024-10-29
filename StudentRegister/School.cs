@@ -33,7 +33,7 @@ namespace StudentRegister
                         {
                             PrintStudent(student);
                         }
-                        Console.Read();
+                        Console.ReadLine();
                         break;
                     case 1: //Create new student
                         AddNewStudent();
@@ -44,6 +44,7 @@ namespace StudentRegister
                         break;
                     case 3: //Find list
                         FindStudentList();
+                        Console.ReadLine();
                         break;
                     case 4: //Exit program
                         DbStudentContext.SaveChanges();
@@ -125,10 +126,10 @@ namespace StudentRegister
         }
         public void EditStudent(Student foundStudent)
         {
-            int index = WhatToEditMenu();
+            int index = WhatToEditMenu(foundStudent);
             switch (index)
             {
-                case 0: //Change ID
+                case 0: //Change Age
                     foundStudent.StudentAge = Input.IntInput(Input.Age());
                     break;
                 case 1: //Change First Name
@@ -146,15 +147,16 @@ namespace StudentRegister
                 case 5: //Return without doing anything
                     break;
             }
+            DbStudentContext.SaveChanges();
             Menu.StartingMenu();
         }
-        public int WhatToEditMenu()
+        public int WhatToEditMenu(Student student)
         {
             List<string> editOptions = new List<string>() {
-                "Change Age", "Change first name", "Change last name",
+                "Change age", "Change first name", "Change last name",
                 "Change city of residence", "Delete student", "Cancel" };
             Menu.MenuUpdate(editOptions);
-            return Menu.MenuSelection();
+            return Menu.PrintMenuForEdit(student, this);
         }
         #endregion
         #region Find students
@@ -188,8 +190,10 @@ namespace StudentRegister
                     break;
                 case 5: //search by ID
                     var foundStudent = FindStudentById(Input.IntInput("ID"));
+                    PrintStudent(foundStudent);
                     break;
             }
+            Menu.StartingMenu(); //update to starting-menu
         }
         #region Finding a single student
         public Student FindStudentById(int studentId)

@@ -44,7 +44,7 @@ namespace StudentRegister
                 Console.CursorVisible = true;
                 string? inputString = Console.ReadLine();
 
-                if (inputString != null)
+                if (inputString != null && inputString != "")
                 {
                     bool containsInt = inputString.Any(char.IsDigit);
                     if (!containsInt)
