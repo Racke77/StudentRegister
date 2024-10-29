@@ -9,11 +9,11 @@ namespace StudentRegister
 {
     internal class Input
     {
-        public static int IntInput()
+        public static int IntInput(string desiredInput)
         {
             while (true)
             {
-                Console.WriteLine("Please input the student's Age:");
+                Console.WriteLine($"Please input the student's {desiredInput}:");
                 Console.CursorVisible = true;
                 try
                 {
@@ -61,6 +61,22 @@ namespace StudentRegister
                     Console.WriteLine($"You need to include a {requestedString}.");
                 }
             }
+        }
+        public static string CityName()
+        {
+            return "city";
+        }
+        public static string FirstName()
+        {
+            return "first name";
+        }
+        public static string LastName()
+        {
+            return "last name";
+        }
+        public static string Age()
+        {
+            return "age";
         }
     }
 }

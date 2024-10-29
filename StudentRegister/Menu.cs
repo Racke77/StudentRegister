@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace StudentRegister
                 "Display all students",
                 "Add new student",
                 "Edit student" ,
+                "Find students",
                 "Exit"
             };
         }
