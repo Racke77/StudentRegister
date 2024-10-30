@@ -62,6 +62,15 @@ namespace StudentRegister
                 }
             }
         }
+        public static int IdCatcher()
+        {
+            Console.Clear();
+            Console.CursorVisible = false;
+            Console.WriteLine("There is no student with that ID, please input a new ID");
+            Console.ReadLine();
+            IntInput(Id());
+            return 0;
+        }
         #region string-types
         public static string CityName()
         {
@@ -78,6 +87,10 @@ namespace StudentRegister
         public static string Age()
         {
             return "age";
+        }
+        public static string Id()
+        {
+            return "ID";
         }
         #endregion
     }

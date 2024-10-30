@@ -12,18 +12,24 @@ namespace StudentRegister
     {
         public List<string> MenuList;
         public int MenuSelect;
+        public Printer Printer;
         public Boolean SelectedOption;
         public Menu()
         {
             StartingMenu();
+            Printer = new Printer();
         }
         #region Updating Menu List
-        public void StartingMenu()
+        private void ClearOptions()
         {
             if (MenuList != null)
             {
                 MenuList.Clear();
             }
+        }
+        public void StartingMenu()
+        {
+            ClearOptions();
             MenuList = new List<string>()
             {
                 "Display all students",
@@ -33,55 +39,70 @@ namespace StudentRegister
                 "Exit"
             };
         }
+        public void FindStudentsByXOptions()
+        {
+            ClearOptions();
+            MenuList = new List<string>()
+            {
+                "Search by full name",
+                "Search by first name",
+                "Search by last name",
+                "Search by city",
+                "Search by age",
+                "Search by ID"
+            };
+        }
+        public void StudentEditHowToPickStudent()
+        {
+            ClearOptions();
+            MenuList = new List<string>()
+            {
+                "Pick from a list", "Find by ID"
+            };
+        }
+        public void WhatToEditAboutStudent()
+        {
+            ClearOptions();
+            MenuList = new List<string>()
+            {
+                "Change age", "Change first name", "Change last name",
+                "Change city of residence", "Delete student", "Cancel"
+            };
+        }
         public void MenuUpdate(List<string> menuOptions)
         {
             MenuList = menuOptions;
         }
         #endregion
-        public int MenuSelection()
+        #region MenuSelection
+        public int MenuSelectionNormal()
         {
             MenuSelect = 0;
             SelectedOption = false;
-            while (SelectedOption != true)
+            while (!SelectedOption)
             {
                 Console.Clear();
-                Console.CursorVisible = false;                
-                PrintMenuOptions();//printing out the full menu
-                HandleUserInput();
+                Console.CursorVisible = false;
+                Printer.PrintMenuNormal(this);
+                ReadingMenuInput();
             }
             return MenuSelect;
         }
-        #region Printing
-        private void PrintMenuOptions()
-        {
-            foreach (string menuOption in MenuList)
-            {
-                if (MenuList.IndexOf(menuOption) == MenuSelect)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                Console.WriteLine(menuOption);
-                Console.ForegroundColor = ConsoleColor.Gray;
-            }
-        }
-        public int PrintMenuForEdit(Student student, School school)
+        public int MenuSelectionEditStudent(Student student)
         {
             MenuSelect = 0;
             SelectedOption = false;
-            while (SelectedOption != true)
+            while (!SelectedOption)
             {
-                Console.Clear();
-                school.PrintStudent(student);
-                Console.WriteLine();
-                Console.CursorVisible = false;
-                PrintMenuOptions();//printing out the full menu
-                HandleUserInput();
+                Printer.PrintMenuEditStudent(this, student);
+                ReadingMenuInput();
             }
+
             return MenuSelect;
         }
         #endregion
         #region User-input
-        private void HandleUserInput()
+        public void ReadingMenuInput()
         {
             var keyPressed = Console.ReadKey();
 
@@ -104,7 +125,7 @@ namespace StudentRegister
                         MenuSelect--;
                     }
                     break;
-                    //when pressing enter -> update property to true -> break the loop
+                //when pressing enter -> update property to true -> break the loop
                 case ConsoleKey.Enter:
                     SelectedOption = true;
                     break;
